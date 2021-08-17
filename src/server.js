@@ -14,25 +14,25 @@ const app = new Koa()
 
 app.use(helmet())
 
-app.use(
-  logger({
-    transports: [
-      createTransporterPostgres(),
-      new winston.transports.Console({
-        format: winston.format.combine(
-          winston.format.simple(),
-          winston.format.colorize({ all: true })
-        )
-      })
-    ],
-    reqKeys: ['header.content-type', 'query', 'body'],
-    reqSelect: [],
-    reqUnselect: ['header.cookie', 'header.authorization', 'body.password'],
-    resKeys: ['status', 'message'],
-    resSelect: [],
-    resUnselect: ['header']
-  })
-)
+// app.use(
+//   logger({
+//     transports: [
+//       createTransporterPostgres(),
+//       new winston.transports.Console({
+//         format: winston.format.combine(
+//           winston.format.simple(),
+//           winston.format.colorize({ all: true })
+//         )
+//       })
+//     ],
+//     reqKeys: ['header.content-type', 'query', 'body'],
+//     reqSelect: [],
+//     reqUnselect: ['header.cookie', 'header.authorization', 'body.password'],
+//     resKeys: ['status', 'message'],
+//     resSelect: [],
+//     resUnselect: ['header']
+//   })
+// )
 
 app.use(
   Cors({
@@ -46,7 +46,7 @@ app.use(koaBody({ multipart: true }))
 
 app.use(errorHandlingMiddleware)
 
-//app.use(authMiddleware)
+app.use(authMiddleware)
 
 app.use(routes.routes())
 app.use(routes.allowedMethods())

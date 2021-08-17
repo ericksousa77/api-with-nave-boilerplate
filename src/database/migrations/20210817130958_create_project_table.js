@@ -10,22 +10,20 @@ export const up = knex =>
       END;
       $$ language 'plpgsql';`
     )
-    .createTable('navers', table => {
+    .createTable('projects', table => {
       table.uuid('id').primary()
-      table.string('name').notNullable()
-      table.date('birthdate').notNullable()
-      table.string('job_role').notNullable()
-      table.date('admission_date').notNullable()
+      table.string('name').notNullable();
       table.timestamps(true, true)
     })
     .raw(
-      `CREATE TRIGGER update_navers_updated_at BEFORE UPDATE 
-      ON navers FOR EACH ROW EXECUTE PROCEDURE
+      `CREATE TRIGGER update_projects_updated_at BEFORE UPDATE 
+      ON projects FOR EACH ROW EXECUTE PROCEDURE
       update_updated_at_column();`
     )
     
 
 export const down = knex =>
   knex.schema
-    .dropTableIfExists('navers')
+    .dropTableIfExists('projects')
+    
     
