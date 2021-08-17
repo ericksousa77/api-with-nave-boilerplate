@@ -9,7 +9,8 @@ export const create = async ctx => {
     name: body.name,
     birthdate: body.birthdate,
     job_role: body.job_role,
-    admission_date: body.admission_date
+    admission_date: body.admission_date,
+    user_id: body.user_id
     })
 }
 
