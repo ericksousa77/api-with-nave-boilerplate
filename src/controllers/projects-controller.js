@@ -1,8 +1,21 @@
 import Project from 'models/Project'
+import User from 'models/User'
+
+import {
+  NotFound,
+} from 'helpers'
 
 export const create = async ctx => {
 
   const { body } = ctx.request;
+
+  console.log(body.user_id);
+
+  await User.query()
+    .findOne({id: body.user_id})
+    .catch(() => {
+      throw new NotFound('User not found')
+    })
 
   return Project.query().insert({
     name: body.name,
@@ -47,10 +60,22 @@ export const show = async ctx => {
 
 }
 
+export const destroy = async ctx => {
+
+  try{
+    await Project.query().deleteById(ctx.params.id)
+    return {message: 'project deleted successfully'}
+
+  }catch(err){
+    console.log('Erro deleting project')
+  }
+
+}
 
 
 export default{
   create,
   index,
-  show
+  show,
+  destroy
 }

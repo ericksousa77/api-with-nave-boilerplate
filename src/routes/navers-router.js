@@ -9,6 +9,8 @@ router.post('/navers/create', NaverController.create)
 
 router.get('/navers/index', NaverController.index)
 
+router.delete('/navers/delete/:id', NaverController.destroy)
+
 
 
 

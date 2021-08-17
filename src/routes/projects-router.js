@@ -8,7 +8,9 @@ router.get('/projects/show/:id', ProjectController.show)
 
 router.post('/projects/create', ProjectController.create)
 
- router.get('/projects/index', ProjectController.index)
+router.get('/projects/index', ProjectController.index)
+
+router.delete('/projects/delete/:id', ProjectController.destroy)
 
 
 

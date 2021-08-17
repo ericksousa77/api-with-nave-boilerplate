@@ -1,9 +1,19 @@
 
 import Naver from 'models/Naver'
+import User from 'models/User'
+import {
+  NotFound,
+} from 'helpers'
 
 export const create = async ctx => {
 
   const { body } = ctx.request;
+
+  await User.query()
+    .findOne({id: body.user_id})
+    .catch(() => {
+      throw new NotFound('User not found')
+    })
 
   return Naver.query().insert({
     name: body.name,
@@ -60,10 +70,22 @@ export const show = async ctx => {
 
 }
 
+export const destroy = async ctx => {
+  console.log(ctx.params.id)
+  try{
+    await Naver.query().deleteById(ctx.params.id)
+    return {message: 'user deleted successfully'}
+  }catch(err){
+    console.log('Erro deleting naver')
+  }
+
+}
+
 
 export default {
     create,
     index,
     show,
+    destroy
 
   }
