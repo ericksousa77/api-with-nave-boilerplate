@@ -7,19 +7,19 @@ class ProjectNaver extends modelUuid(baseModel) {
 
   static relationMappings = {
     naver: {
-      relation: Model.BelongsToOneRelation,
+      relation: Model.HasManyRelation,
       modelClass: 'Naver',
       join: {
-        from: 'projects_navers.naver_id',
-        to: 'naver.id'
+        from: 'navers.id',
+        to: 'projects_navers.naver_id'
       }
     },
     project: {
       relation: Model.BelongsToOneRelation,
       modelClass: 'Project',
       join: {
-        from: 'projects_navers.project_id',
-        to: 'project.id'
+        from: 'projects.id',
+        to: 'projects_navers.project_id'
       }
     },
 

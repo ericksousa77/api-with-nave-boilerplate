@@ -5,7 +5,7 @@ import { baseModel, modelUuid } from './index'
 class User extends modelUuid(baseModel) {
   static tableName = 'users'
   static hidden = ['password']
-
+  // has many users and projects
   static relationMappings = {
     role: {
       relation: Model.BelongsToOneRelation,

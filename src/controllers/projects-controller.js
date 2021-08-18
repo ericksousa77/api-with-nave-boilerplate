@@ -9,6 +9,8 @@ export const create = async ctx => {
 
   const { body } = ctx.request;
 
+  // ctx.state.user.id
+
   console.log(body.user_id);
 
   await User.query()
@@ -52,6 +54,7 @@ export const show = async ctx => {
   try{
     const project = await Project.query()
     .findOne({id: ctx.params.id})
+    .withGraphJoined('naver')
 
     return project
   }catch(err){
