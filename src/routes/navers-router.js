@@ -11,6 +11,8 @@ router.get('/navers/index', NaverController.index)
 
 router.delete('/navers/delete/:id', NaverController.destroy)
 
+router.put('/navers/update/:id', NaverController.update)
+
 
 
 

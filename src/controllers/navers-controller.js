@@ -12,12 +12,6 @@ export const create = async ctx => {
 
   const { body } = ctx.request;
 
-  await User.query()
-    .findOne({id: ctx.state.user.id})
-    .catch(() => {
-      throw new NotFound('User not found')
-    })
-
   await Project.query()
   .findOne({id: body.project_id})
   .catch(() => {
@@ -101,11 +95,56 @@ export const destroy = async ctx => {
 
 }
 
+export const update = async ctx => {
+
+   const { body, project_id } = ctx.request
+
+  // const { project_id } = ctx.params.id
+
+  // await User.query()
+  //   .findOne({id: ctx.state.user.id})
+  //   .catch(() => {
+  //     throw new NotFound('User not found')
+  //   })
+
+
+  const naver = await Naver.query()
+    .findOne({id: ctx.params.id})
+    .catch(() => {
+      throw new NotFound('Naver not found')
+    })
+
+  if(naver.user_id !== ctx.state.user.id)
+    return {message: 'user not have this naver'}
+
+  await Naver.query().patchAndFetchById(ctx.params.id, {
+    name: body.name,
+    birthdate: body.birthdate,
+    admission_date: body.admission_date,
+    job_role: body.job_role,
+  })
+
+  await ProjectNaver.query().patchAndFetchById({naver_id: naver.id}, {
+    project_id: project_id
+  })
+
+  const naver_updated = await ProjectNaver.query()
+    .findOne({naver_id: ctx.params.id})
+    .withGraphJoined('naver')
+    .withGraphJoined('project')
+
+    // console.log(project);
+
+  return naver_updated
+
+}
+
 
 export default {
     create,
     index,
     show,
-    destroy
+    destroy,
+    update,
 
   }

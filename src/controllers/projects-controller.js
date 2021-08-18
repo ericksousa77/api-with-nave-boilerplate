@@ -1,5 +1,6 @@
 import Project from 'models/Project'
 import User from 'models/User'
+import ProjectNaver from 'models/Project_Naver'
 
 import {
   NotFound,
@@ -48,9 +49,12 @@ export const index = async ctx => {
 export const show = async ctx => {
 
   try{
-    const project = await Project.query()
-    .findOne({id: ctx.params.id})
+    const project = await ProjectNaver.query()
+    .findOne({project_id: ctx.params.id})
     .withGraphJoined('naver')
+    .withGraphJoined('project')
+
+    // console.log(project);
 
     return project
   }catch(err){
