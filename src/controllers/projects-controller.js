@@ -10,12 +10,6 @@ export const create = async ctx => {
 
   const { body } = ctx.request
 
-  await User.query()
-    .findOne({id: ctx.state.user.id})
-    .catch(() => {
-      throw new NotFound('User not found')
-    })
-
   return Project.query().insert({
     name: body.name,
     user_id: ctx.state.user.id,
@@ -49,6 +43,9 @@ export const index = async ctx => {
 export const show = async ctx => {
 
   try{
+
+    //pensar em algo melhor pra por aqui
+
     const project = await ProjectNaver.query()
     .findOne({project_id: ctx.params.id})
     .withGraphJoined('naver')
@@ -66,7 +63,18 @@ export const show = async ctx => {
 export const destroy = async ctx => {
 
   try{
+
+    const project = await Project.query()
+      .findOne({id: ctx.params.id})
+      .catch(() => {
+        throw new NotFound('Project not found')
+      })
+
+    if(project.user_id !== ctx.state.user.id)
+      return {message: 'user not have this project'}
+
     await Project.query().deleteById(ctx.params.id)
+
     return {message: 'project deleted successfully'}
 
   }catch(err){
@@ -75,10 +83,47 @@ export const destroy = async ctx => {
 
 }
 
+export const update = async ctx =>{
+
+  const { body, project_id } = ctx.request
+
+  const project = await Project.query()
+    .findOne({id: ctx.params.id})
+    .catch(() => {
+      throw new NotFound('Project not found')
+    })
+
+  if(project.user_id !== ctx.state.user.id)
+    return {message: 'user not have this project'}
+
+  await Project.query().patchAndFetchById(ctx.params.id, {
+    name: body.name
+  })
+
+  // await ProjectNaver.query().patchAndFetchById({naver_id: naver.id}, {
+  //   project_id: project_id
+  // })
+
+  const project_updated = await ProjectNaver.query()
+    // .find({project_id: ctx.params.id})
+    .where(builder => {
+      if (project_id) builder.where('project_id',`%${ctx.params.id}%`)
+    })
+    .withGraphJoined('naver')
+    .withGraphJoined('project')
+    .select('naver', 'project')
+
+    // console.log(project);
+
+  return {project_updated}
+
+}
+
 
 export default{
   create,
   index,
   show,
-  destroy
+  destroy,
+  update,
 }
