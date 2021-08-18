@@ -16,7 +16,12 @@ export const up = knex =>
       table.date('birthdate').notNullable()
       table.string('job_role').notNullable()
       table.date('admission_date').notNullable()
-      table.string('user_id').notNullable()
+      table.uuid('user_id').unsigned()
+      table
+        .foreign('user_id')
+        .references('id')
+        .inTable('users')
+        .onDelete('CASCADE')
       table.timestamps(true, true)
     })
     .raw(

@@ -1,6 +1,9 @@
 
 import Naver from 'models/Naver'
 import User from 'models/User'
+import Project from 'models/Project'
+import ProjectNaver from 'models/Project_Naver'
+
 import {
   NotFound,
 } from 'helpers'
@@ -15,13 +18,30 @@ export const create = async ctx => {
       throw new NotFound('User not found')
     })
 
-  return Naver.query().insert({
+  await Project.query()
+  .findOne({id: body.project_id})
+  .catch(() => {
+    throw new NotFound('Project not found')
+  })
+
+
+  const naver = await Naver.query().insert({
     name: body.name,
     birthdate: body.birthdate,
     job_role: body.job_role,
     admission_date: body.admission_date,
     user_id: body.user_id
     })
+
+  // console.log(naver, body.project_id);
+
+
+  await ProjectNaver.query().insert({
+    naver_id: naver.id,
+    project_id: body.project_id
+  })
+
+  return naver
 }
 
 export const index = async ctx => {

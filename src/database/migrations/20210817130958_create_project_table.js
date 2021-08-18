@@ -16,6 +16,24 @@ export const up = knex =>
       table.string('user_id').notNullable()
       table.timestamps(true, true)
     })
+    .createTable('projects_navers', table => {
+      table.uuid('id').primary()
+      table.uuid('naver_id').unsigned()
+      table
+        .foreign('naver_id')
+        .references('id')
+        .inTable('navers')
+        .onDelete('CASCADE')
+
+      table.uuid('project_id').unsigned()
+      table
+        .foreign('project_id')
+        .references('id')
+        .inTable('projects')
+        .onDelete('CASCADE')
+
+      table.timestamps(true, true)
+    })
     .raw(
       `CREATE TRIGGER update_projects_updated_at BEFORE UPDATE
       ON projects FOR EACH ROW EXECUTE PROCEDURE
@@ -25,6 +43,9 @@ export const up = knex =>
 
 export const down = knex =>
   knex.schema
+    .dropTableIfExists('projects_navers')
     .dropTableIfExists('projects')
+
+
 
 
