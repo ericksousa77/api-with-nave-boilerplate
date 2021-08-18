@@ -7,21 +7,17 @@ import {
 
 export const create = async ctx => {
 
-  const { body } = ctx.request;
-
-  // ctx.state.user.id
-
-  console.log(body.user_id);
+  const { body } = ctx.request
 
   await User.query()
-    .findOne({id: body.user_id})
+    .findOne({id: ctx.state.user.id})
     .catch(() => {
       throw new NotFound('User not found')
     })
 
   return Project.query().insert({
     name: body.name,
-    user_id: body.user_id,
+    user_id: ctx.state.user.id,
     })
 }
 

@@ -13,7 +13,7 @@ export const create = async ctx => {
   const { body } = ctx.request;
 
   await User.query()
-    .findOne({id: body.user_id})
+    .findOne({id: ctx.state.user.id})
     .catch(() => {
       throw new NotFound('User not found')
     })
@@ -30,7 +30,7 @@ export const create = async ctx => {
     birthdate: body.birthdate,
     job_role: body.job_role,
     admission_date: body.admission_date,
-    user_id: body.user_id
+    user_id: ctx.state.user.id
     })
 
   // console.log(naver, body.project_id);
