@@ -85,10 +85,20 @@ export const show = async ctx => {
 }
 
 export const destroy = async ctx => {
-  console.log(ctx.params.id)
+
+  const naver = await Naver.query()
+    .findOne({id: ctx.params.id})
+    .catch(() => {
+      throw new NotFound('Naver not found')
+    })
+
+  if(naver.user_id !== ctx.state.user.id)
+    return {message: 'user not have this naver'}
+
+
   try{
     await Naver.query().deleteById(ctx.params.id)
-    return {message: 'user deleted successfully'}
+    return {message: 'naver deleted successfully'}
   }catch(err){
     console.log('Erro deleting naver')
   }
@@ -132,10 +142,11 @@ export const update = async ctx => {
     .findOne({naver_id: ctx.params.id})
     .withGraphJoined('naver')
     .withGraphJoined('project')
+    .select('naver', 'project')
 
     // console.log(project);
 
-  return naver_updated
+  return {naver_updated}
 
 }
 

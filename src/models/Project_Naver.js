@@ -11,8 +11,9 @@ class ProjectNaver extends modelUuid(baseModel) {
       modelClass: 'Naver',
       join: {
         from: 'navers.id',
-        to: 'projects_navers.naver_id'
+        to: 'projects_navers.naver_id',
       }
+
     },
     project: {
       relation: Model.BelongsToOneRelation,
