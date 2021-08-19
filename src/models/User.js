@@ -19,7 +19,7 @@ class User extends modelUuid(baseModel) {
       relation: Model.HasManyRelation,
       modelClass: 'Naver',
       join: {
-        from: 'navers.id',
+        from: 'navers.user_id',
         to: 'users.id',
       }
 
@@ -28,7 +28,7 @@ class User extends modelUuid(baseModel) {
       relation: Model.HasManyRelation,
       modelClass: 'Project',
       join: {
-        from: 'projects.id',
+        from: 'projects.user_id',
         to: 'users.id',
       }
 

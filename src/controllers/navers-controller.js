@@ -12,13 +12,10 @@ export const create = async ctx => {
 
   const { body } = ctx.request;
 
-  await Project.query()
+  const projectExists = await Project.query()
   .findOne({id: body.project_id})
-  .catch(() => {
-    throw new NotFound('Project not found')
-  })
 
-
+  //insertGraph
   const naver = await Naver.query().insert({
     name: body.name,
     birthdate: body.birthdate,
@@ -27,13 +24,8 @@ export const create = async ctx => {
     user_id: ctx.state.user.id
     })
 
-  // console.log(naver, body.project_id);
-
-
-  await ProjectNaver.query().insert({
-    naver_id: naver.id,
-    project_id: body.project_id
-  })
+  if (projectExists)
+    await ProjectNaver.query().insert({naver_id: naver.id,project_id: body.project_id})
 
   return naver
 }
@@ -107,46 +99,60 @@ export const destroy = async ctx => {
 
 export const update = async ctx => {
 
-   const { body, project_id } = ctx.request
-
-  // const { project_id } = ctx.params.id
-
-  // await User.query()
-  //   .findOne({id: ctx.state.user.id})
-  //   .catch(() => {
-  //     throw new NotFound('User not found')
-  //   })
-
+  const { body } = ctx.request
 
   const naver = await Naver.query()
     .findOne({id: ctx.params.id})
     .catch(() => {
       throw new NotFound('Naver not found')
     })
+  // console.log(naver)
 
   if(naver.user_id !== ctx.state.user.id)
     return {message: 'user not have this naver'}
 
-  await Naver.query().patchAndFetchById(ctx.params.id, {
+  console.log(naver)
+
+  const options = {
+    relate: ['project_id'],
+  };
+
+
+  return Naver.query().upsertGraph({
+
+    id: ctx.params.id,
     name: body.name,
     birthdate: body.birthdate,
     admission_date: body.admission_date,
     job_role: body.job_role,
-  })
+    project_id: [
+        { id: body.project_id },
+       ]
 
-  await ProjectNaver.query().patchAndFetchById({naver_id: naver.id}, {
-    project_id: project_id
-  })
+    },options);
 
-  const naver_updated = await ProjectNaver.query()
-    .findOne({naver_id: ctx.params.id})
-    .withGraphJoined('naver')
-    .withGraphJoined('project')
-    .select('naver', 'project')
+  // await Naver.query().patchAndFetchById(ctx.params.id, {
+  //   name: body.name,
+  //   birthdate: body.birthdate,
+  //   admission_date: body.admission_date,
+  //   job_role: body.job_role,
+  // })
 
-    // console.log(project);
+  // //upsert
+  // await ProjectNaver.query().patchAndFetchById({naver_id: naver.id}, {
+  //   project_id: project_id
+  // })
 
-  return {naver_updated}
+  // //upsert
+  // const naver_updated = await ProjectNaver.query()
+  //   .findOne({naver_id: ctx.params.id})
+  //   .withGraphJoined('[naver, project]')
+  //   //.withGraphJoined('project')
+  //   .select('naver' , 'project')
+
+  //   // console.log(project);
+
+  // return {naver_updated}
 
 }
 
