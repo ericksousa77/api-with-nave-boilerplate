@@ -14,8 +14,27 @@ class User extends modelUuid(baseModel) {
         from: 'users.role_id',
         to: 'roles.id'
       }
-    }
+    },
+    naver: {
+      relation: Model.HasManyRelation,
+      modelClass: 'Naver',
+      join: {
+        from: 'navers.id',
+        to: 'users.id',
+      }
+
+    },
+    project: {
+      relation: Model.HasManyRelation,
+      modelClass: 'Project',
+      join: {
+        from: 'projects.id',
+        to: 'users.id',
+      }
+
+    },
   }
+
 }
 
 export default User
