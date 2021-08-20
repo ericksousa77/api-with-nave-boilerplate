@@ -6,26 +6,34 @@ class Project extends modelUuid(baseModel) {
   static tableName = 'projects'
 
   static relationMappings = {
-    role: {
+    naver: {
       relation: Model.BelongsToOneRelation,
       modelClass: 'Naver',
       join: {
-        from: 'users.role_id',
-        to: 'roles.id'
+        from: 'projects.user_id',
+        to: 'users.id'
       }
     },
-    // naver: {
-    //   relation: Model.ManyToManyRelation,
-    //   modelClass: 'Naver',
-    //   join: {
-    //     from: 'project.id',
-    //     through: {
-    //       from: 'projects_navers.naver_id',
-    //       to: 'projects_navers.project_id'
-    //     },
-    //     to: 'naver.id'
-    //   }
-    // },
+    naver: {
+      relation: Model.ManyToManyRelation,
+      modelClass: 'Naver',
+      join: {
+        from: 'project.id',
+        through: {
+          from: 'projects_navers.project_id',
+          to: 'projects_navers.navers_id'
+        },
+        to: 'naver.id'
+      }
+    },
+    projectnaver: {
+      relation: Model.HasManyRelation,
+      modelClass: 'Project_Naver',
+      join: {
+        from: 'projects.id',
+        to: 'projects_navers.naver_id'
+      }
+    },
   }
 
 }

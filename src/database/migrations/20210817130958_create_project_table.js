@@ -13,7 +13,12 @@ export const up = knex =>
     .createTable('projects', table => {
       table.uuid('id').primary()
       table.string('name').notNullable()
-      table.string('user_id').notNullable()
+      table.uuid('user_id').unsigned()
+      table
+        .foreign('user_id')
+        .references('id')
+        .inTable('users')
+        .onDelete('CASCADE')
       table.timestamps(true, true)
     })
     .createTable('projects_navers', table => {

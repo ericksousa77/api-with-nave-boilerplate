@@ -12,20 +12,21 @@ export const create = async ctx => {
 
   const { body } = ctx.request;
 
-  const projectExists = await Project.query()
-  .findOne({id: body.project_id})
+  // const projectExists = await Project.query()
+  // .findOne({id: body.project_id})
 
   //insertGraph
-  const naver = await Naver.query().insert({
+  const naver = await Naver.query().insertGraph({
     name: body.name,
     birthdate: body.birthdate,
     job_role: body.job_role,
     admission_date: body.admission_date,
-    user_id: ctx.state.user.id
+    user_id: ctx.state.user.id,
+    projectnaver: body.projects    //atenção ao nome igual ao da relação
     })
 
-  if (projectExists)
-    await ProjectNaver.query().insert({naver_id: naver.id,project_id: body.project_id})
+  // if (projectExists)
+  //   await ProjectNaver.query().insert({naver_id: naver.id,project_id: body.project_id})
 
   return naver
 }
@@ -63,18 +64,9 @@ export const index = async ctx => {
 
 }
 
-export const show = async ctx => {
+export const show = async ctx => Naver.query().findOne({'navers.id': ctx.params.id})
+  .withGraphJoined('projects')
 
-  try{
-    const naver = await Naver.query()
-    .findOne({id: ctx.params.id})
-
-    return naver
-  }catch(err){
-    console.log(err)
-  }
-
-}
 
 export const destroy = async ctx => {
 
@@ -113,9 +105,9 @@ export const update = async ctx => {
 
   console.log(naver)
 
-  const options = {
-    relate: ['project_id'],
-  };
+  // const options = {
+  //   relate: ['project_id'],
+  // };
 
 
   return Naver.query().upsertGraph({
@@ -125,11 +117,13 @@ export const update = async ctx => {
     birthdate: body.birthdate,
     admission_date: body.admission_date,
     job_role: body.job_role,
+
+
     project_id: [
         { id: body.project_id },
        ]
 
-    },options);
+    });
 
   // await Naver.query().patchAndFetchById(ctx.params.id, {
   //   name: body.name,
