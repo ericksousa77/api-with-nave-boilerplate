@@ -35,6 +35,7 @@ export const index = async ctx => {
       if (created_at) builder.whereRaw('date(created_at) = ?', created_at)
     })
     .orderBy(sort, order)
+    .withGraphJoined('navers')
 
 
     return {
@@ -43,23 +44,8 @@ export const index = async ctx => {
 
 }
 
-export const show = async ctx => {
-
-  try{
-
-    //pensar em algo melhor pra por aqui
-
-    const project = await ProjectNaver.query()
-    .findOne({project_id: ctx.params.id})
-    .withGraphJoined('naver')
-    .withGraphJoined('project')
-
-    return project
-  }catch(err){
-    console.log(err)
-  }
-
-}
+export const show = async ctx => Project.query().findOne({'projects.id': ctx.params.id})
+  .withGraphJoined('navers')
 
 export const destroy = async ctx => {
 

@@ -48,6 +48,7 @@ export const index = async ctx => {
       if (created_at) builder.whereRaw('date(created_at) = ?', created_at)
     })
     .orderBy(sort, order)
+    .withGraphJoined('projects')
 
     return {
     navers,
@@ -90,15 +91,10 @@ export const update = async ctx => {
     .catch(() => {
       throw new NotFound('Naver not found')
     })
-  // console.log(naver)
+
 
   if(naver.user_id !== ctx.state.user.id)
     return {message: 'user not have this naver'}
-
-
-  // const options = {
-  //   relate: ['project_id'],
-  // };
 
 
   return Naver.query().upsertGraph({
