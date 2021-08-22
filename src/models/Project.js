@@ -14,16 +14,16 @@ class Project extends modelUuid(baseModel) {
         to: 'users.id'
       }
     },
-    naver: {
+    navers: {
       relation: Model.ManyToManyRelation,
       modelClass: 'Naver',
       join: {
-        from: 'project.id',
+        from: 'projects.id',
         through: {
           from: 'projects_navers.project_id',
-          to: 'projects_navers.navers_id'
+          to: 'projects_navers.naver_id'
         },
-        to: 'naver.id'
+        to: 'navers.id'
       }
     },
     projectnaver: {
@@ -31,7 +31,7 @@ class Project extends modelUuid(baseModel) {
       modelClass: 'Project_Naver',
       join: {
         from: 'projects.id',
-        to: 'projects_navers.naver_id'
+        to: 'projects_navers.project_id'
       }
     },
   }

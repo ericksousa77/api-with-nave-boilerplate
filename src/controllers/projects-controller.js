@@ -1,5 +1,4 @@
 import Project from 'models/Project'
-import User from 'models/User'
 import ProjectNaver from 'models/Project_Naver'
 
 import {
@@ -8,13 +7,16 @@ import {
 
 export const create = async ctx => {
 
-  const { body } = ctx.request
+  const { body } = ctx.request;
 
-  return Project.query().insert({
+  //insertGraph
+  return await Project.query().insertGraph({
     name: body.name,
     user_id: ctx.state.user.id,
+    projectnaver: body.navers    //atenção ao nome igual ao da relação
     })
 }
+
 
 export const index = async ctx => {
 
@@ -52,8 +54,6 @@ export const show = async ctx => {
     .withGraphJoined('naver')
     .withGraphJoined('project')
 
-    // console.log(project);
-
     return project
   }catch(err){
     console.log(err)
@@ -86,38 +86,28 @@ export const destroy = async ctx => {
 
 export const update = async ctx =>{
 
-  const { body, project_id } = ctx.request
+  const { body } = ctx.request
 
+  console.log(ctx.params.id)
   const project = await Project.query()
     .findOne({id: ctx.params.id})
     .catch(() => {
       throw new NotFound('Project not found')
     })
+  // console.log(naver)
 
   if(project.user_id !== ctx.state.user.id)
     return {message: 'user not have this project'}
 
-  await Project.query().patchAndFetchById(ctx.params.id, {
-    name: body.name
-  })
+  //pesquisar se o upsert cria uma nova relação caso ela ainda nao exista
+  return await Project.query().upsertGraph({
 
-  // await ProjectNaver.query().patchAndFetchById({naver_id: naver.id}, {
-  //   project_id: project_id
-  // })
+    id: ctx.params.id,
+    name: body.name,
 
-  const project_updated = await ProjectNaver.query()
-    // .find({project_id: ctx.params.id})
-    .where(builder => {
-      if (project_id) builder.where('project_id',`%${ctx.params.id}%`)
-    })
-    .withGraphJoined('naver')
-    .withGraphJoined('project')
-    .select('naver', 'project')
+    projectnaver: body.navers
 
-    // console.log(project);
-
-  return {project_updated}
-
+    });
 }
 
 

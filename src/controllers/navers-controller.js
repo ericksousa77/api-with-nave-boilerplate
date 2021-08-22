@@ -1,8 +1,5 @@
 
 import Naver from 'models/Naver'
-import User from 'models/User'
-import Project from 'models/Project'
-import ProjectNaver from 'models/Project_Naver'
 
 import {
   NotFound,
@@ -11,9 +8,6 @@ import {
 export const create = async ctx => {
 
   const { body } = ctx.request;
-
-  // const projectExists = await Project.query()
-  // .findOne({id: body.project_id})
 
   //insertGraph
   const naver = await Naver.query().insertGraph({
@@ -24,9 +18,6 @@ export const create = async ctx => {
     user_id: ctx.state.user.id,
     projectnaver: body.projects    //atenção ao nome igual ao da relação
     })
-
-  // if (projectExists)
-  //   await ProjectNaver.query().insert({naver_id: naver.id,project_id: body.project_id})
 
   return naver
 }
@@ -93,6 +84,7 @@ export const update = async ctx => {
 
   const { body } = ctx.request
 
+  console.log(ctx.params.id)
   const naver = await Naver.query()
     .findOne({id: ctx.params.id})
     .catch(() => {
@@ -103,7 +95,6 @@ export const update = async ctx => {
   if(naver.user_id !== ctx.state.user.id)
     return {message: 'user not have this naver'}
 
-  console.log(naver)
 
   // const options = {
   //   relate: ['project_id'],
@@ -119,35 +110,9 @@ export const update = async ctx => {
     job_role: body.job_role,
 
 
-    project_id: [
-        { id: body.project_id },
-       ]
+    projectnaver: body.projects
 
     });
-
-  // await Naver.query().patchAndFetchById(ctx.params.id, {
-  //   name: body.name,
-  //   birthdate: body.birthdate,
-  //   admission_date: body.admission_date,
-  //   job_role: body.job_role,
-  // })
-
-  // //upsert
-  // await ProjectNaver.query().patchAndFetchById({naver_id: naver.id}, {
-  //   project_id: project_id
-  // })
-
-  // //upsert
-  // const naver_updated = await ProjectNaver.query()
-  //   .findOne({naver_id: ctx.params.id})
-  //   .withGraphJoined('[naver, project]')
-  //   //.withGraphJoined('project')
-  //   .select('naver' , 'project')
-
-  //   // console.log(project);
-
-  // return {naver_updated}
-
 }
 
 
