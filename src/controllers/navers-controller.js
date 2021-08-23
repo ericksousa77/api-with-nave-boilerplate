@@ -48,7 +48,7 @@ export const index = async ctx => {
 
       if (job_role) builder.where('job_role', 'ilike', `%${job_role}%`)
 
-      if (created_at) builder.whereRaw('date(created_at) = ?', created_at)
+      // if (created_at) builder.whereRaw('date(created_at) = ?', created_at)
     })
     .orderBy(sort, order)
     .withGraphJoined('projects')
@@ -64,10 +64,11 @@ export const index = async ctx => {
 
 export const show = async ctx => Naver.query().findOne({'navers.id': ctx.params.id})
   .withGraphJoined('projects')
+  .throwIfNotFound()
 
 
 export const destroy = async ctx => {
-
+  //tentar diminuir e colocar um where
   const naver = await Naver.query()
     .findOne({id: ctx.params.id})
     .catch(() => {

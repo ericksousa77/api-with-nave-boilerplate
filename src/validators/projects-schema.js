@@ -10,17 +10,12 @@ const ProjectsValidate = {
   index: () =>
     validationMiddleware({
       query: {
-        page: Joi.number(),
-        pageSize: Joi.number(),
         name: Joi.string().required(),
-        navers: Joi.array(Joi.items(
+        projectnaver: Joi.array().items(
           Joi.object({
             naver_id: Joi.string()
           })
-        )),
-        created_at: Joi.string(),
-        sort: Joi.string().valid(...VALID_SORT_OPTIONS),
-        order: Joi.string().valid(...VALID_ORDER_BY_OPTIONS)
+        ),
       }
     }),
 
@@ -28,11 +23,11 @@ const ProjectsValidate = {
     validationMiddleware({
       body: {
         name: Joi.string().required(),
-        navers: Joi.array(Joi.items(
+        projectnaver: Joi.array().items(
           Joi.object({
             naver_id: Joi.string()
           })
-        )),
+        ),
       }
     }),
 
@@ -40,11 +35,12 @@ const ProjectsValidate = {
     validationMiddleware({
       body: {
         name: Joi.string().required(),
-        navers: Joi.array(Joi.items(
+        projectnaver: Joi.array().items(
           Joi.object({
-            naver_id: Joi.string()
+            naver_id: Joi.string(),
+            id: Joi.string()
           })
-        )),
+        ),
       }
     }),
 }
