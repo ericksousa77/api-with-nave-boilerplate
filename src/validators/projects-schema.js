@@ -6,19 +6,16 @@ const VALID_SORT_OPTIONS = ['name', 'created_at']
 
 const VALID_ORDER_BY_OPTIONS = ['asc', 'desc', 'ASC', 'DESC']
 
-const NaversValidate = {
+const ProjectsValidate = {
   index: () =>
     validationMiddleware({
       query: {
         page: Joi.number(),
         pageSize: Joi.number(),
         name: Joi.string().required(),
-        birthdate: Joi.date().required(),
-        admission_date: Joi.date().required(),
-        job_role: Joi.string().required(),
-        projects: Joi.array(Joi.items(
+        navers: Joi.array(Joi.items(
           Joi.object({
-            project_id: Joi.string()
+            naver_id: Joi.string()
           })
         )),
         created_at: Joi.string(),
@@ -31,12 +28,9 @@ const NaversValidate = {
     validationMiddleware({
       body: {
         name: Joi.string().required(),
-        birthdate: Joi.date().required(),
-        admission_date: Joi.date().required(),
-        job_role: Joi.string().required(),
-        projects: Joi.array(Joi.items(
+        navers: Joi.array(Joi.items(
           Joi.object({
-            project_id: Joi.string()
+            naver_id: Joi.string()
           })
         )),
       }
@@ -46,16 +40,13 @@ const NaversValidate = {
     validationMiddleware({
       body: {
         name: Joi.string().required(),
-        birthdate: Joi.date().required(),
-        admission_date: Joi.date().required(),
-        job_role: Joi.string().required(),
-        projects: Joi.array(Joi.items(
+        navers: Joi.array(Joi.items(
           Joi.object({
-            project_id: Joi.string()
+            naver_id: Joi.string()
           })
         )),
       }
     }),
 }
 
-export default NaversValidate
+export default ProjectsValidate
