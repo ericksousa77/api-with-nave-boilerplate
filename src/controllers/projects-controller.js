@@ -1,8 +1,8 @@
 import Project from 'models/Project'
-import ProjectNaver from 'models/Project_Naver'
 
 import {
   NotFound,
+  getPagination,
 } from 'helpers'
 
 export const create = async ctx => {
@@ -27,6 +27,8 @@ export const index = async ctx => {
     created_at
   } = ctx.query
 
+  const { page, pageSize, calculatePageCount } = getPagination(ctx.query)
+
   const projects = await Project.query()
 
     .where(builder => {
@@ -36,10 +38,12 @@ export const index = async ctx => {
     })
     .orderBy(sort, order)
     .withGraphJoined('navers')
+    .page(page, pageSize)
 
-
-    return {
-    projects,
+  return {
+    ...projects,
+    page: page + 1,
+    pageCount: calculatePageCount(projects.total)
   }
 
 }
