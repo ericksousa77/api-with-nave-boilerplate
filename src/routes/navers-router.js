@@ -15,7 +15,4 @@ router.delete('/navers/:id', NaverController.destroy)
 
 router.put('/navers/:id', NaverValidate.update(), NaverController.update)
 
-
-
-
 export default router.routes()

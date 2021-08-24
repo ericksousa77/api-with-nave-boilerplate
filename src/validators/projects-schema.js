@@ -15,7 +15,7 @@ const ProjectsValidate = {
           Joi.object({
             naver_id: Joi.string().uuid()
           })
-        ),
+        )
       }
     }),
 
@@ -27,7 +27,7 @@ const ProjectsValidate = {
           Joi.object({
             naver_id: Joi.string().uuid()
           })
-        ),
+        )
       }
     }),
 
@@ -40,9 +40,9 @@ const ProjectsValidate = {
             naver_id: Joi.string().uuid(),
             id: Joi.string()
           })
-        ),
+        )
       }
-    }),
+    })
 }
 
 export default ProjectsValidate

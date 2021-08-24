@@ -18,7 +18,7 @@ const NaversValidate = {
           Joi.object({
             project_id: Joi.string()
           })
-        ),
+        )
       }
     }),
 
@@ -33,7 +33,7 @@ const NaversValidate = {
           Joi.object({
             project_id: Joi.string().uuid()
           })
-        ),
+        )
       }
     }),
 
@@ -49,9 +49,9 @@ const NaversValidate = {
             project_id: Joi.string(),
             id: Joi.string()
           })
-        ),
+        )
       }
-    }),
+    })
 }
 
 export default NaversValidate

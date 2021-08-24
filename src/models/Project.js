@@ -33,9 +33,8 @@ class Project extends modelUuid(baseModel) {
         from: 'projects.id',
         to: 'projects_navers.project_id'
       }
-    },
+    }
   }
-
 }
 
 export default Project
