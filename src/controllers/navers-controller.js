@@ -32,7 +32,7 @@ export const index = async ctx => {
     admission_date,
     sort = 'created_at',
     order = 'desc',
-    created_at
+    // created_at
   } = ctx.query
 
   const { page, pageSize, calculatePageCount } = getPagination(ctx.query)
@@ -67,26 +67,10 @@ export const show = async ctx => Naver.query().findOne({'navers.id': ctx.params.
   .throwIfNotFound()
 
 
-export const destroy = async ctx => {
-  //tentar diminuir e colocar um where
-  const naver = await Naver.query()
-    .findOne({id: ctx.params.id})
-    .catch(() => {
-      throw new NotFound('Naver not found')
-    })
-
-  if(naver.user_id !== ctx.state.user.id)
-    return {message: 'user not have this naver'}
-
-
-  try{
-    await Naver.query().deleteById(ctx.params.id)
-    return {message: 'naver deleted successfully'}
-  }catch(err){
-    console.log('Erro deleting naver')
-  }
-
-}
+export const destroy = ctx => Naver.query()
+    .deleteById(ctx.params.id)
+    .where({user_id: ctx.state.user.id})
+    .returning('*')
 
 export const update = async ctx => {
 

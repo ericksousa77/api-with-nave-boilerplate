@@ -11,9 +11,9 @@ const ProjectsValidate = {
     validationMiddleware({
       query: {
         name: Joi.string().required(),
-        projectnaver: Joi.array().items(
+        navers: Joi.array().items(
           Joi.object({
-            naver_id: Joi.string()
+            naver_id: Joi.string().uuid()
           })
         ),
       }
@@ -23,9 +23,9 @@ const ProjectsValidate = {
     validationMiddleware({
       body: {
         name: Joi.string().required(),
-        projectnaver: Joi.array().items(
+        navers: Joi.array().items(
           Joi.object({
-            naver_id: Joi.string()
+            naver_id: Joi.string().uuid()
           })
         ),
       }
@@ -35,9 +35,9 @@ const ProjectsValidate = {
     validationMiddleware({
       body: {
         name: Joi.string().required(),
-        projectnaver: Joi.array().items(
+        navers: Joi.array().items(
           Joi.object({
-            naver_id: Joi.string(),
+            naver_id: Joi.string().uuid(),
             id: Joi.string()
           })
         ),

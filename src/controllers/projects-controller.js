@@ -51,28 +51,10 @@ export const index = async ctx => {
 export const show = async ctx => Project.query().findOne({'projects.id': ctx.params.id})
   .withGraphJoined('navers')
 
-export const destroy = async ctx => {
-
-  try{
-
-    const project = await Project.query()
-      .findOne({id: ctx.params.id})
-      .catch(() => {
-        throw new NotFound('Project not found')
-      })
-
-    if(project.user_id !== ctx.state.user.id)
-      return {message: 'user not have this project'}
-
-    await Project.query().deleteById(ctx.params.id)
-
-    return {message: 'project deleted successfully'}
-
-  }catch(err){
-    console.log('Erro deleting project')
-  }
-
-}
+  export const destroy = ctx => Project.query()
+  .deleteById(ctx.params.id)
+  .where({user_id: ctx.state.user.id})
+  .returning('*')
 
 export const update = async ctx =>{
 
