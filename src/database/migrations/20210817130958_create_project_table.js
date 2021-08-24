@@ -45,12 +45,5 @@ export const up = knex =>
       update_updated_at_column();`
     )
 
-
 export const down = knex =>
-  knex.schema
-    .dropTableIfExists('projects_navers')
-    .dropTableIfExists('projects')
-
-
-
-
+  knex.schema.dropTableIfExists('projects_navers').dropTableIfExists('projects')

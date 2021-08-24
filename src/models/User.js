@@ -8,7 +8,7 @@ class User extends modelUuid(baseModel) {
   // has many users and projects
   static relationMappings = {
     role: {
-      relation: Model.BelongsToOneRelation,  //quando o modelo de origem tem a chave estrangeira
+      relation: Model.BelongsToOneRelation, //quando o modelo de origem tem a chave estrangeira
       modelClass: 'Role',
       join: {
         from: 'users.role_id',
@@ -20,7 +20,7 @@ class User extends modelUuid(baseModel) {
       modelClass: 'Naver',
       join: {
         from: 'users.id',
-        to: 'navers.user_id',
+        to: 'navers.user_id'
       }
     },
     project: {
@@ -28,12 +28,10 @@ class User extends modelUuid(baseModel) {
       modelClass: 'Project',
       join: {
         from: 'users.id',
-        to: 'projects_users_id',
+        to: 'projects_users_id'
       }
-
-    },
+    }
   }
-
 }
 
 export default User

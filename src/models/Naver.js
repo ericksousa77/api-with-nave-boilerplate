@@ -33,7 +33,7 @@ class Naver extends modelUuid(baseModel) {
         from: 'navers.id',
         to: 'projects_navers.naver_id'
       }
-    },
+    }
     //relation manytomany project
     //relation hasmany project_naver
   }
