@@ -5,15 +5,15 @@ import NaverValidate from 'validators/navers-schema'
 
 const router = new Router()
 
-router.get('/navers/show/:id', NaverController.show)
+router.get('/navers/:id', NaverController.show)
 
 router.post('/navers/create', NaverValidate.create(), NaverController.create)
 
-router.get('/navers/index', NaverController.index)
+router.get('/navers', NaverController.index)
 
-router.delete('/navers/delete/:id', NaverController.destroy)
+router.delete('/navers/:id', NaverController.destroy)
 
-router.put('/navers/update/:id', NaverValidate.update(), NaverController.update)
+router.put('/navers/:id', NaverValidate.update(), NaverController.update)
 
 
 
